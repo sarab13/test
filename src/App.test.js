@@ -1,28 +1,29 @@
 const Application = require('spectron').Application;
 const assert = require('assert');
+const path=require('path')
+describe('My React app',function() {
+ //this.timeout(10000); // Increase timeout for slower machines
+    let app;
+    const appPath = path.join(__dirname, '..', 'src', 'index.js')
 
-describe('Electron App', function() {
-  this.timeout(10000);
-
-  beforeEach(function() {
-    this.app = new Application({
-      path: './',
-      args: []
+    beforeEach(function() {
+      app = new Application({
+        path:appPath, // Replace with the path to your app
+        args: [] // Replace with any command line arguments your app requires
+      });
+      return app.start();
     });
-    return this.app.start();
-  });
-
-  afterEach(function() {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
-  });
-
-  it('should open a window', function() {
-    return this.app.client.getWindowCount().then(function(count) {
-      assert.equal(count, 1);
-    });
-  });
-
   
-});
+    afterEach(function() {
+      if (app && app.isRunning()) {
+        return app.stop();
+      }
+    });
+    it('shows a window', function() {
+        return app.client.getWindowCount().then(function(count) {
+          assert.equal(count, 1);
+        });
+      });
+      
+  });
+  
